@@ -15,6 +15,8 @@ namespace WebClient.Controllers
 
         public IActionResult Index()
         {
+            //Toán handsome
+            //Ngan branch
             return View();
         }
 
