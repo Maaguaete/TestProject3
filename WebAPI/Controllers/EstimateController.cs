@@ -26,9 +26,8 @@ namespace WebAPI.Controllers
             /// DbContext
             try
             {
-                
                 Policy policy = _db.Policies.Where(p => p.PolicyType.Equals(model.PolicyType)).FirstOrDefault()!;
-                if(policy != null)
+                if (policy != null)
                 {
                     premium += policy.Annually;
                 }
@@ -41,7 +40,7 @@ namespace WebAPI.Controllers
             }
             catch (ArgumentNullException ex)
             {
-               
+
                 throw;
             }
 
@@ -70,8 +69,8 @@ namespace WebAPI.Controllers
             //    Connection.Instance.Get().Close();
             //}
 
-            
-            
+
+
             return Ok(premium);
         }
         double GetRateOnPrice(int vehicleRate)
@@ -95,7 +94,7 @@ namespace WebAPI.Controllers
         {
             int thisYear = System.DateTime.Now.Year;
 
-            switch(thisYear - Int16.Parse(verion))
+            switch (thisYear - Int16.Parse(verion))
             {
                 case 0:
                 case 1:
@@ -121,36 +120,52 @@ namespace WebAPI.Controllers
             }
         }
         [HttpGet]
+        [Route("TestJoin")]
+        public IActionResult TestJoin()
+        {
+            var data = (from est in _db.Estimates
+                        join veh in _db.Vehicles on est.VehicleId equals veh.Id
+                        select new TestJoinModel
+                        {
+                            VehicleName = veh.VehicleName,
+                            VehicleOwnerName = veh.VehicleOwnerName,
+                            EstimateNo = est.EstimateNo,
+                            Premium = est.Premium
+                        }
+                        ).Take(1);
+            return Ok(data);
+        }
+        [HttpGet]
         [Route("Certificates")]
         public IActionResult Certificates()
         {
             List<CertificateModel> certificates = new List<CertificateModel>();
             certificates = (from cer in _db.Certificates
-                        join cusbill in _db.CustomerBills on cer.BillId equals cusbill.Id
-                        join pol in _db.Policies on cer.VehiclePolicyId equals pol.Id
-                        join cus in _db.Customers on cusbill.CustomerId equals cus.Id
-                        //where cer.CustomerId == id
-                        select new CertificateModel
-                        {
-                            Id = cer.Id,
-                            PolicyNo = cer.PolicyNo,
-                            PolicyType = pol.PolicyType,
-                            BillNo = cusbill.BillNo,
-                            Premium = cusbill.Amount,
-                            CustomerName = cus.CustomerName,
-                            CustomerAddress = cus.CustomerAddress!,
-                            CustomerPhone = cus.CustomerPhone,
-                            PolicyCoverage = pol.Coverage,
-                            VehicleNumber = cer.VehicleNumber,
-                            VehicleName = cer.VehicleName,
-                            VehicleOwnerName = cer.VehicleOwnerName,
-                            VehicleModel = cer.VehicleModel,
-                            VehicleVersion = cer.VehicleVersion,
-                            PolicyDate = cer.PolicyDate,
-                            PolicyDuration = cer.PolicyDuration,
-                            VehicleWarranty = cer.VehicleWarranty,
-                            Prove = cer.Prove
-                        }).ToList();
+                            join cusbill in _db.CustomerBills on cer.BillId equals cusbill.Id
+                            join pol in _db.Policies on cer.VehiclePolicyId equals pol.Id
+                            join cus in _db.Customers on cusbill.CustomerId equals cus.Id
+                            //where cer.CustomerId == id
+                            select new CertificateModel
+                            {
+                                Id = cer.Id,
+                                PolicyNo = cer.PolicyNo,
+                                PolicyType = pol.PolicyType,
+                                BillNo = cusbill.BillNo,
+                                Premium = cusbill.Amount,
+                                CustomerName = cus.CustomerName,
+                                CustomerAddress = cus.CustomerAddress!,
+                                CustomerPhone = cus.CustomerPhone,
+                                PolicyCoverage = pol.Coverage,
+                                VehicleNumber = cer.VehicleNumber,
+                                VehicleName = cer.VehicleName,
+                                VehicleOwnerName = cer.VehicleOwnerName,
+                                VehicleModel = cer.VehicleModel,
+                                VehicleVersion = cer.VehicleVersion,
+                                PolicyDate = cer.PolicyDate,
+                                PolicyDuration = cer.PolicyDuration,
+                                VehicleWarranty = cer.VehicleWarranty,
+                                Prove = cer.Prove
+                            }).ToList();
             return Ok(certificates);
         }
         [HttpGet]
@@ -178,7 +193,7 @@ namespace WebAPI.Controllers
                         VehicleName = cer.VehicleName,
                         VehicleOwnerName = cer.VehicleOwnerName,
                         VehicleModel = cer.VehicleModel,
-                        VehicleVersion = cer.VehicleVersion ,
+                        VehicleVersion = cer.VehicleVersion,
                         PolicyDate = cer.PolicyDate,
                         PolicyDuration = cer.PolicyDuration,
                         VehicleWarranty = cer.VehicleWarranty,
@@ -187,5 +202,5 @@ namespace WebAPI.Controllers
             return Ok(cert);
         }
     }
-   
+
 }
