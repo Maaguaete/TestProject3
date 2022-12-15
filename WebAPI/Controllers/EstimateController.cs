@@ -1,10 +1,5 @@
-﻿using Dapper;
-using DataAccess.Models;
-using Microsoft.AspNetCore.Http;
+﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using WebAPI.Data;
 using WebAPI.Models;
 namespace WebAPI.Controllers
 {

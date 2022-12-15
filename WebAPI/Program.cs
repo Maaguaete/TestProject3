@@ -18,7 +18,7 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
            .AllowAnyHeader();
 }));
 builder.Services.AddDbContext<VehicleInsurancedb2Context>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStrings")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
